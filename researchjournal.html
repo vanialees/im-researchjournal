@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+     * {
+        margin: 0;
+        padding: 0;
+        border: none;
+        }
+        @font-face { 
+    font-family: 'helv'; 
+    src: url('HelveticaNowDisplay.otf');
+    } 
+    @font-face {
+        font-family: 'helvAlt';
+        font-feature-settings: "aalt"; 
+        src: url('HelveticaNowDisplay.otf');
+        font-feature-settings: "ss04";
+        unicode-range: U+0052,U+0052 ;}
+    .cover {
+        page: cover;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://source.unsplash.com/random/1600x900') no-repeat center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        }
+        body {
+            /* display: flex; */
+            height: 100vh;
+            font-weight: 100;
+            font-family: helv, helvAlt, Arial, sans-serif;
+            font-size:14px;
+            font-feature-settings: "ss04";
+            font-weight: lighter;
+        }
+
+        section {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+        }
+
+        .parent,
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: center; */
+            align-items: center;
+            /* padding: 20px; */
+            /* this can add a frame*/
+            box-sizing: border-box;
+            max-width: 50%;
+            /* border: rgb(24, 185, 64) 1px solid; */
+        }
+
+        .parent {
+            position: relative;
+        }
+
+        .left, .topdiv, .bottomdiv {
+            background: url('https://source.unsplash.com/random/800x601') no-repeat center center;
+            background-size: cover;
+            /* border: blue 1px dashed; */
+            width: 100%;
+            height: 100vh;
+            /* adjust as needed */
+        }
+        .topdiv, .bottomdiv {
+            height: 50vh;
+            width:100%
+        }
+
+        .leftDoubleImage {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .leftDoubleImage img {
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            /* border: blue 1px solid; */
+            width:auto;
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 4em;
+            /* adjust as needed */
+            left: 2em;
+            width:calc(100% - 4em - 1em); 
+            /* adjust as needed */
+            color: black;
+            /* adjust as needed */
+            font-size: 1em;
+            line-height: 1.0em;
+            /* adjust as needed */
+            background-color: white;
+            padding: 2px 5px;
+        }
+
+        .right {
+            /* background: #f0f0f0; */
+            /* border: rgb(221, 148, 39) 1px solid; */
+            padding: 2em;
+        }
+
+        h1 {
+            font-size: 8rem;
+            font-weight: lighter;
+            text-transform: uppercase;
+            text-align: left;
+            margin-bottom: 20px;
+            width: 100%;
+            line-height:0.9em;
+        }
+        h2 {
+            text-align:left;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 1em;
+            width: 100%;
+        }
+        h2::before{
+            content: "{";
+            line-height: 2em;
+        }
+        h2::after{
+            content: "}";
+        }
+        p {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+            font-size: 0.8em;
+            width:100%;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        em{
+            font-size: inherit;
+            line-height: 3em;
+            width: 100%;
+        }
+        @media (max-width: 600px) {
+            *{            
+            margin: 0;
+            padding: 0;
+            border: none;}
+            body {
+                flex-direction: column;
+            }
+        }
+
+    @media print {
+        @page {
+            size: A4 landscape;
+            margin:1cm;
+            /* marks: crop cross;
+            bleed: 5mm; */
+            @bottom-center {
+    content: counter(page);
+  }
+         }
+         @page cover {
+  margin: 0; /* Use a full size page */
+
+  /* Remove page numbers for the cover */
+  @bottom-center {
+    content: none;
+  }
+}
+        @page :left {
+            margin-left: 1cm;
+        }
+        
+        @page :right {
+            margin-right: 1cm;
+        }
+        body {
+        width: 297mm;
+        height: 210mm;
+        margin: 0;
+        padding: 0;
+        page-break-after: always;  
+        font-size: 10pt;}
+        em {
+        text-align: left;
+        }
+        section {
+            min-height: calc(100% - 2cm);
+            height: 100vh;
+            display: flex;
+            page-break-inside: avoid;
+            page-break-after: always !important;
+        }
+        h1 {
+        font-size: 5em;
+        line-height: 0.8em;
+        }
+        h2 {
+        font-size: 1.5em;
+        }
+        div {
+        /* max-width:50%; */
+        }
+        p {
+        font-size: 0.8em;
+        }
+        em{
+            font-size: 10pt;
+            line-height: 3em;
+            width: 100%;
+        }
+    }
+    caption_url {
+        font-size: 0.8em;
+        color: #333;
+        background-color: white;
+        text-decoration: none;
+        font-size: 0.8em;
+        word-wrap: break-word;
+        width:80%;
+        text-align: left;
+    }
+    </style>
+</head>
+
+<body> 
+    <!-- THIS SECTION IS YOUR COVER PAGE -->
+    <section style="background-image: url(jagged_simple.jpg);">
+        <div class="parent" >
+            <div class="">
+                
+            <div class="caption">
+            
+            </div>
+            </div>
+        <div class="right" style="background: none;color:rgb(0, 0, 0)">
+            <div background-color: white;>
+            <h1 style="line-height: 0.9;font-size: 4em;">INTERACTIVE MEDIA RESEARCH JOURNAL, 2025</h1>
+            <h1 style="line-height: 0.9;font-size: 1em;">BY: VANIA LEE</h1>
+        </p>
+        <p> sCroLl dOWn ! :)
+            <ol>
+            </ol></p>
+        </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo10.png');"></div>
+            <div class="caption">ALEXIS PERSANI<span class="https://www.behance.net/alexis-persani"></span></div>
+        </div>
+        <div class="right">
+            <h1>ALEXIS PERSANI</h1>
+            <h2>1999</h2>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+
+            <p> I chose Alexis Persani as an inspiration because of his imaginative use of 3D typography and surreal digital compositions that challenge conventional visual boundaries. 
+                His ability to blend realism with fantasy through bold color, dynamic textures, and intricate detail transforms static designs into captivating visual stories. Persani’s 
+                work is not only technically masterful but also emotionally engaging, often giving everyday subjects a sense of wonder and depth. This aligns with my interest in designing web 
+                experiences that go beyond basic interaction—toward spaces that surprise, delight, and spark curiosity. His unique approach to combining typography with abstract visuals resonates 
+                with my desire to explore the expressive potential of type and motion in digital design. By merging art and technology in visually rich ways, Persani encourages experimentation and 
+                narrative, values I aim to carry into my own web-based projects.  
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>  
+                <p>
+                </p>
+                <p> 
+                </p>
+                <p>
+                </p>
+                <p> 
+            <a href="https://www.behance.net/alexis-persani">ALEXIS PERSANI LINK HERE!</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo7.png');"></div>
+            <div class="caption">The Velvet Underground, ANDY WARHOL, 1966<span class="https://www.moma.org/collection/works/297601"></span></div>
+        </div>
+        <div class="right">
+            <h1>ANDY WARHOL</h1>
+            <h2>1966</h2>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+
+            <p> Andy Warhol is a strong inspiration for my web design class due to his abstract visuals and bold use of color. His iconic pop art style, rooted in 
+                repetition, contrast, and popular culture, translates effectively to digital design. Warhol’s work challenges conventional boundaries between art 
+                and commerce—an approach that encourages creative freedom in layout, typography, and interactivity. I’m particularly drawn to how his use of vibrant, 
+                unexpected color combinations creates strong visual impact, something I aim to reflect in my own design choices. His ability to turn everyday subjects 
+                into striking visuals inspires me to experiment with how graphics and layout can elevate user experience online.  
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>  
+                <p>
+                </p>
+                <p> 
+                </p>
+                <p>
+                </p>
+                <p> 
+            <a href="https://www.moma.org/collection/works/297601">ANDY WARHOL LINK HERE!</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo3.png');"></div>
+            <div class="caption">BAUHAUS<span class="https://cdgcdgcdg.com/?srsltid=AfmBOorCNLMAhYzme41eiEcXZf9ER6IK113qfIpNEWp4iXN0f6amLPOT"></span></div>
+        </div>
+        <div class="right">
+            <h1>BAUHAUS</h1>
+            <h2>1919</h2>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+
+            <p> The Bauhaus was a groundbreaking design school founded in 1919 in Weimar, Germany, by architect Walter Gropius. 
+                It sought to unify art, craft, and technology, promoting the idea that design should serve society and be functional. 
+                Rejecting decorative excess, the school embraced simplicity, geometric forms, and clean lines, championing the 
+                principle that "form follows function." The Bauhaus movement significantly influenced architecture, graphic 
+                design, product design, and typography. Its faculty and students—including Paul Klee, Wassily Kandinsky, and 
+                Marcel Breuer—emphasized experimentation and interdisciplinary collaboration. Iconic Bauhaus works often feature 
+                modular structures, sans-serif typography, and a minimalist aesthetic. Although the school was closed by the 
+                Nazis in 1933, its legacy continued to spread globally as key figures emigrated. Today, Bauhaus principles 
+                remain deeply embedded in contemporary design practices across disciplines.
+            </p>Bauhaus has been a lasting source of inspiration in my design journey. In this course, its influence became 
+                particularly evident in the layout of my website. For instance, in Workbook 2C, I incorporated color-coded buttons 
+                for navigation between pages—a subtle nod to Bauhaus ideals. I’m especially drawn to designs that use minimal 
+                structures with strategic use of color to convey personality and function, reflecting the timeless appeal of the 
+                Bauhaus philosophy.  
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>  
+            <a href="https://suti.co/blogs/news/bauhaus-design-and-its-enduring-influence-on-minimalism">BAUHAUS LINK HERE!</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo2.png');"></div>
+            <div class="caption">CDG<span class="https://cdgcdgcdg.com/?srsltid=AfmBOorCNLMAhYzme41eiEcXZf9ER6IK113qfIpNEWp4iXN0f6amLPOT"></span></div>
+        </div>
+        <div class="right">
+            <h1>CLOSER</h1>
+            <h2>Creative Agency, 2010</h2>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+
+            <p>Closer is a creative agency who created the Comme des Garçons (CDG) website. They specialise
+                in crafting immersive digital experiences and has collaborated with various luxury brands. 
+                The Comme des Garçons (CDG) website places a strong emphasis on visual design and interactivity, 
+                enhancing the user experience by inviting visitors to engage with the site in a playful and 
+                unconventional manner. Deeply rooted in the brand’s ethos of rebellion and experimentation, 
+                the website departs from standard fashion e-commerce practices. Instead, it presents itself 
+                more as a digital installation or conceptual artwork than a traditional online store. This 
+                approach closely aligns with the vision of the brand’s founder, Rei Kawakubo, who once stated: 
+                “Creation takes things forward. Without anything new, there is no progress.”
+            </p>From the moment I first encountered the CDG website, I was immediately captivated by its 
+                distinctive graphics and interactive elements. Small details—such as floating product 
+                images—transform the browsing process into an immersive experience. Notably, the absence of 
+                conventional navigation initially created a sense of disorientation, prompting a deeper level 
+                of curiosity and engagement. This unconventional structure not only challenges the viewer but 
+                also invites exploration, reinforcing the brand’s avant-garde identity."
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p> 
+            
+            <a href="https://cdgcdgcdg.com/?srsltid=AfmBOorCNLMAhYzme41eiEcXZf9ER6IK113qfIpNEWp4iXN0f6amLPOT">CDG LINK HERE!</a>
+        </div>
+    </section>
+    
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo4.png');"></div>
+            <div class="caption">DANIEL WENZEL<span class="https://wenzeldaniel.com/w_atd.php"></span></div>
+        </div>
+        <div class="right">
+            <h1>DANIEL WENZEL</h1>
+            <h2>2019</h2>
+            <p>
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p> Daniel Wenzel's <em>Automated Type Design</em> project was developed in 2019 as part of his thesis at HTWG Konstanz 
+                in Germany. The project investigates the intersection of automation, artificial intelligence, and type design, 
+                resulting in the creation of over 100 typefaces within a 16-week period. The accompanying website serves as an 
+                interactive showcase of his thesis and was launched in conjunction with the project’s exhibition at the Werkschau 
+                HTWG Konstanz during the summer of 2019. The site outlines Wenzel’s five-step framework for automating type 
+                design—Form, Systematics, Extension, Refinement, and Variation—and features numerous examples of typefaces generated 
+                using both systematic and AI-driven processes. This work demonstrates Wenzel’s innovative approach to integrating 
+                technology with creative practice and contributes meaningfully to the evolving conversation around automation in 
+                design..
+            </p>What stands out to me is his effective incorporation of experimental graphics throughout the website, which highlights 
+                the depth of his process. By integrating advanced technology into his design methodology, Wenzel successfully elevates the 
+                final visual outcomes. One particularly striking example involves a large-scale digital installation composed of nine 
+                interconnected screens forming a cohesive visual piece. As someone who appreciates a monochromatic color palette, I was 
+                especially drawn to his ability to achieve contrast, texture, and tonal variation using minimal color. The animated 
+                components of the website were also a source of inspiration for me — elements I drew from and applied in my own work 
+                during Weeks 7 and 8 of this course.      
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <a href="https://wenzeldaniel.com/w_atd.php">DANIEL WENZEL LINK HERE!</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo9.png');"></div>
+            <div class="caption">THE LUME<span class="https://www.thelumemelbourne.com/"></span></div>
+        </div>
+        <div class="right">
+            <h1>THE LUME</h1>
+            <h2>2021</h2>
+            <p>
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p> I chose THE LUME Melbourne as an inspiration because of its ability to immerse the audience and transport them into 
+                an entirely different world through the power of installation art. Its large-scale, multi-sensory experiences combine 
+                projection, sound, and even scent to reimagine traditional artworks in innovative, interactive ways. This immersive 
+                approach transforms the act of viewing art into a full-body experience, allowing visitors to engage with visual 
+                culture on a deeper, more emotional level. I find this particularly compelling for web design, as it encourages 
+                thinking beyond flat screens—toward creating environments that envelop users and evoke strong sensory responses. 
+                The way THE LUME brings static images to life and crafts narrative-driven spaces deeply aligns with my desire to 
+                design digital platforms that feel experiential, rather than purely functional.      
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <a href="https://www.thelumemelbourne.com/">THE LUME LINK HERE!</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo8.png');"></div>
+            <div class="caption">PULSE ROOM<span class="https://design-milk.com/rafael-lozano-hemmer-takes-your-pulse/"></span></div>
+        </div>
+        <div class="right">
+            <h1>PULSE ROOM</h1>
+            <h2>2021</h2>
+            <p>
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p> Pulse Room is an interactive installation by artist Rafael Lozano-Hemmer that transforms biometric data into 
+                a mesmerizing visual experience. The artwork features a room filled with hundreds of incandescent light bulbs, 
+                each flashing in sync with the heartbeat of a participant. When a viewer places their hand on a sensor, their 
+                pulse is detected and translated into a rhythm of light, which is then added to the sequence of previous 
+                participants’ pulses.
+                This piece explores the relationship between technology, human presence, and collective memory. The simplicity 
+                of the visual concept—light blinking to the rhythm of a heartbeat—makes the experience deeply personal and 
+                emotionally resonant. I find Pulse Room inspiring for digital design because of how it merges data, interactivity, 
+                and minimalism into something poetic. It reminds me that design can be both functional and emotionally driven, 
+                using technology not just for utility but for creating immersive, human-centered experiences.      
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <a href="https://design-milk.com/rafael-lozano-hemmer-takes-your-pulse/">PULSE ROOM LINK HERE!</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo6.png');"></div>
+            <div class="caption">REKODO BY ROUND.COM<span class="https://www.round.com.au/home/rekodo-vinyl-bar-restaurant"></span></div>
+        </div>
+        <div class="right">
+            <h1>ROUND.</h1>
+            <h1>COM</h1>
+            <h2>2002</h2>
+            <p>
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p> Studio Round, a Melbourne-based design practice, was founded in 2002 by Creative Director Michaela Webb and Strategy 
+                Director Robert Nudds. Since its inception, the studio has grown to include a team of 20, working across various 
+                disciplines to create transformative brands and experiences. The studio's approach combines culture, commerce, and 
+                creativity, aiming to build brands that influence culture and connect with audiences on a deeper level. Their work 
+                encompasses identities, strategy, print, digital, campaign, content, art direction, placemaking, and the built 
+                environment. Studio Round's commitment to thoughtful storytelling and strategic design has positioned them as a leading 
+                creative agency in Australia, collaborating with clients across various industries to deliver impactful and enduring 
+                design solutions.
+            <p> Studio Round’s ability to blend storytelling with strong visual identity deeply inspires me. Their work is consistently 
+                refined, purposeful, and concept-driven. I admire how they balance minimalism with boldness, always considering brand 
+                context. Their design approach encourages me to think more strategically and emotionally in my own creative process. 
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <a href="https://www.round.com.au/home/rekodo-vinyl-bar-restaurant">ROUND.COM LINK HERE!</a>
+        </div>
+    </section>
+    
+    
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo5.png');"></div>
+            <div class="caption">STUDIO ONGARATO<span class="https://studioongarato.com.au/"></span></div>
+        </div>
+        <div class="right">
+            <h1>STUDIO ONGARATO</h1>
+            <h2>1993</h2>
+            <p>
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p> Studio Ongarato is a Melbourne-based, internationally recognised design studio renowned for its innovative approach to 
+                branding, wayfinding, placemaking, and experiential environments. Established in 1993 by Creative Director Fabio Ongarato 
+                and Director Ronnen Goren, the studio has consistently challenged conventional design norms, crafting culturally influential 
+                brands and experiences over the past three decades. With offices in Melbourne, Hong Kong, and the Americas, Studio Ongarato 
+                operates across diverse sectors, including hospitality, property, arts, and culture. Their multidisciplinary team comprises 
+                designers, curators, editors, architects, art directors, and craftspeople, collaborating closely with leading artists and 
+                artisans to deliver unique and compelling outcomes for each project. Notable projects include branding and environmental 
+                graphics for the Jackalope Hotel, wayfinding systems for the Western Australian Museum, and identity design for the 
+                National Gallery of Australia. The studio's work is characterised by a rigorous, strategic interrogation of brand and 
+                context, aiming to connect on an experiential level that elevates clients to the forefront of cultural influence. 
+            <p> Studio Ongorato has made outstanding projects that I take great inspiration from. I chose Studio Ongarato as inspiration 
+                because of their bold, conceptual approach to design that seamlessly blends storytelling, spatial experience, and visual 
+                identity. Their work pushes boundaries and engages audiences emotionally, which aligns with my own goals to create meaningful, 
+                immersive design outcomes that go beyond conventional aesthetics. 
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <a href="https://studioongarato.com.au/">STUDIO ONGARATO LINK HERE!</a>
+        </div>
+    </section>
+
+        
+    <section>
+        <div class="parent">
+            <div class="left" style="background-image: url('photo11.png');"></div>
+            <div class="caption">YAYOI KUSAMA, NGV, 2025<span class="https://www.ngv.vic.gov.au/exhibition/yayoi-kusama/"></span></div>
+        </div>
+        <div class="right">
+            <h1>YAYOI KUSAMA @ NGV</h1>
+            <h2>2025</h2>
+            <p>
+            </p>
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p> I chose the Yayoi Kusama exhibition at the National Gallery of Victoria (NGV) as a source of inspiration because of its bold use 
+                of repetition, color, and immersive installation art. Kusama's signature polka dots, mirrored environments, and vibrant, large-scale 
+                works create an otherworldly atmosphere that blurs the boundary between the viewer and the artwork. Her ability to transform entire 
+                spaces into dreamlike experiences resonates with my interest in creating web designs that feel interactive and all-encompassing. 
+                The NGV exhibition, in particular, invited visitors to become part of the artwork, encouraging playfulness and emotional engagement. 
+                This approach inspires me to think of digital platforms not just as tools, but as spaces where users can feel visually and emotionally 
+                immersed. Kusama’s fearless creativity and commitment to a unique visual language challenge me to embrace boldness and repetition in 
+                my own work, using design to evoke wonder and connection. 
+            <p>
+            </p>
+            <p> 
+            </p>
+            <p>
+            </p>
+            <p>  
+            <a href="https://www.ngv.vic.gov.au/exhibition/yayoi-kusama/">YAYOI KUSAMA LINK HERE!</a>
+        </div>
+    </section>
+    
+    
+
+    <script>
+        /* THIS SCRIPT IS LOADED VIA CDN AND ESSENTIALLY READS THE .csv FILE ROW BY ROW 
+        TO GET THE VARIOUS `COMPONENTS` OF YOUR `JOURNAL` ONE `ENTRY` PER SECTION */
+        $(document).ready(function () {
+            Papa.parse('ResearchJournal.csv', {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    results.data.forEach(function (row) {
+                        var section = $('<section>');
+                        var parentDiv = $('<div>').addClass('parent');
+                        var leftDiv = $('<div>').addClass(row['Class']);
+                        var topdiv = $('<div>').addClass('topdiv').css('background-image', 'url(' + row['ImageSrc'] + ')');
+                        var bottomdiv = $('<div>').addClass('bottomdiv').css('background-image', 'url(' + row['ImageSrc2'] + ')');
+                        var rightDiv = $('<div>').addClass('right');
+                        
+                        var h1 = $('<h1>').text(row['Title']);
+                        var h2 = $('<h2>').text(row['Description']);
+                        var p = $('<p>').text(row['BodyText']);
+                        var a = $('<a>').attr('href', row['Link']).text(row['Link']);
+                        var img = $('<img>').attr('src', row['ImageSrc']);
+                        var img2 = $('<img>').attr('src', row['ImageSrc2']);
+                        //var figcaption = $('<figcaption>').text(row['Caption'].'\n'.$row['Caption2']);
+                        //figure.append(img, figcaption);
+                        if (row['Class'] == 'leftDoubleImage') {
+                            leftDiv.append(topdiv, bottomdiv);
+                            var captionText = 'Above: '+ row['Caption'] + ' | Below: ' + row['Caption2'];
+                            var captionDiv = $('<div>').addClass('caption').text(captionText);
+                        } else {
+                            leftDiv.css('background-image', 'url(' + row['ImageSrc'] + ')');
+                            leftDiv.css('background-size', 'cover');
+                            var captionDiv = $('<div>').addClass('caption').text(row['Caption']);
+                        }
+                        parentDiv.append(leftDiv, captionDiv);
+                        rightDiv.append(h1);
+                        var keyWords = row['Keywords'].split(', ');
+                        var span = '<p style="width:100%; line-height:2em;">';
+                        keyWords.forEach((keyword) => {
+                            span+='#' + keyword + '&nbsp;';
+                        });
+                        span+='</p>';
+                        rightDiv.append(h2, p, a, span);
+                        section.append(parentDiv, rightDiv);
+                        $('body').append(section);
+                    });
+                }
+            });
+        });
+    </script>
+     <!-- YOU CAN `UNCOMMENT` THIS SECTION AND EDIT IT TO TEST ANY STRUCTURAL OR STYLE CHANGES YOU MIGHT WANT TO MAKE
+        YOU COULD ALSO COPY A NUMBER OF THESE SECTIONS IF YOU PREFER TO WORK WITH A STATIC TEMPLATE, JUST CHANGE TH EIMAGES AND TEXTS MANUALLY. -->
+    <!-- 
+    <section>
+        <div class="parent">
+            <div class="left"></div>
+            <div class="caption">Your caption goes here, with <span class="caption_title">A Title, </span>Author, &
+                <span class="caption_url">url</span></div>
+        </div>
+        <div class="right">
+            <h1>Header</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc at bibendum dapibus, risus
+                ante dapibus est, a feugiat turpis elit id eros.</p>
+            <a href="#">Read more</a>
+        </div>
+    </section> -->
+</body>
+
+</html>
